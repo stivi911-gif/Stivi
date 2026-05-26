@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ABB Ревізія</title>
+    <style>
+        /* БАЗОВІ НАЛАШТУВАННЯ ТА РОЗШИРЕНА ШАПКА */
+        body { background: #08080a; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; padding-top: 175px; height: calc(100vh - 175px); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        
+        /* ОНОВЛЕНА ВЕРТИКАЛЬНА ПАНЕЛЬ ІНФОРМАЦІЇ */
+        .shop-bar { position: fixed; top: 0; left: 0; width: 100%; background: #121214; color: #ffffff; text-align: center; padding: 12px 0; z-index: 1003; border-bottom: 2px solid #e74c3c; box-shadow: 0 2px 15px rgba(0,0,0,0.9); }
+        .shop-bar .main-title-text { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .shop-bar .head-name { font-size: 11px; color: #ff4d4d; font-weight: bold; margin-top: 4px; display: block; }
+        
+        /* НАВІГАЦІЯ */
+        .header-tabs { position: fixed; top: 72px; left: 0; width: 100%; background: #0a0a0c; z-index: 1002; border-bottom: 1px solid #222228; }
+        .tabs-container { display: table; width: 100%; table-layout: fixed; }
+        .tab-btn { display: table-cell; text-align: center; padding: 16px 0; font-weight: bold; font-size: 10px; text-transform: uppercase; color: #9a9aa5; background: #0a0a0c; border: none; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { color: #ffffff; background: #121214; border-bottom: 3px solid #e74c3c; font-size: 11px; }
+        
+        /* ЛІЧИЛЬНИКИ ПРОГРЕСУ */
+        .stats-bar { display: flex; justify-content: space-around; background: #1a1a1f; padding: 10px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #25252b; }
+        .stat-item { text-align: center; font-size: 11px; text-transform: uppercase; color: #888; font-weight: bold; }
+        .stat-val { display: block; font-size: 18px; color: #fff; margin-top: 3px; }
+        .stat-val.active-val { color: #e74c3c; }
+        .stat-val.done-val { color: #27ae60; }
+
+        /* СПОВІЩЕННЯ */
+        #alert { background: #c0392b; color: white; padding: 15px; position: fixed; top: 125px; left: 0; width: 100%; display: none; z-index: 1001; text-align: center; font-weight: bold; font-size: 14px; border-bottom: 2px solid #fff; box-shadow: 0 5px 25px rgba(192, 41, 43, 0.8); box-sizing: border-box; }
+        
+        .tab-content { display: none; padding: 12px; box-sizing: border-box; }
+        .tab-content.active { display: block; }
+        
+        /* БЛОКИ ТА КАРТКИ */
+        .block { border: 1px solid #222228; margin-bottom: 20px; border-radius: 16px; background: #121214; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .main-title { background: #1a1a1f; color: #ffffff; padding: 14px; font-weight: 800; text-align: center; text-transform: uppercase; font-size: 12px; letter-spacing: 1.5px; border-bottom: 1px solid #222228; }
+        .person-group { background: #16161a; padding: 10px 16px; font-size: 13px; color: #ff4d4d; font-weight: bold; border-bottom: 1px solid #222228; }
+        
+        .card { padding: 16px; border-bottom: 1px solid #1a1a1f; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; background: #121214; }
+        .z-name { font-size: 16px; font-weight: 700; color: #ffffff; max-width: 50%; word-break: break-all; line-height: 1.2; }
+        
+        .action-btn { border: none; padding: 11px 18px; font-size: 11px; font-weight: 800; border-radius: 24px; text-transform: uppercase; cursor: pointer; color: #fff; }
+        .btn-done { background: #27ae60; box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3); }
+        .btn-undo { background: #3e4a59; font-size: 9px; padding: 8px 14px; border-radius: 18px; color: #d1d1d1; }
+        .status-done-text { color: #27ae60; font-weight: bold; font-size: 12px; text-transform: uppercase; margin-right: 5px; }
+        
+        .search-input { width: 100%; padding: 14px 18px; border: 1px solid #2d2d35; background: #1a1a1f; color: #fff; border-radius: 14px; box-sizing: border-box; margin-bottom: 15px; font-size: 16px; font-weight: 500; }
+        .search-input:focus { border-color: #ff4d4d; outline: none; background: #202025; }
+        
+        .code-row { display: flex; justify-content: space-between; padding: 14px 16px; margin-bottom: 8px; border-radius: 12px; background: #16161a; border: 1px solid #222228; align-items: center; }
+        .code-num { color: #ff4d4d; font-weight: 800; font-size: 18px; min-width: 80px; text-align: right; font-family: monospace; }
+        .code-desc { color: #ffffff; font-size: 16px; font-weight: 500; word-break: break-word; max-width: 70%; }
+
+        /* КАЛЬКУЛЯТОР ПАКЕТІВ */
+        .calc-box { max-width: 380px; margin: 0 auto; background: #121214; padding: 20px; border-radius: 20px; border: 1px solid #222228; box-sizing: border-box; }
+        .calc-label { display: block; font-size: 11px; color: #8a8a95; margin-bottom: 7px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
+        .calc-input { width: 100%; padding: 14px; background: #08080a; border: 1px solid #2d2d35; color: #fff; border-radius: 14px; font-size: 20px; box-sizing: border-box; margin-bottom: 16px; text-align: center; font-weight: bold; }
+        .calc-input:focus { border-color: #ff4d4d; outline: none; }
+        
+        .type-selector { display: flex; gap: 10px; margin-bottom: 18px; }
+        .calc-type-btn { background: #1a1a1f; border: 1px solid #2d2d35; color: #9a9aa5; padding: 12px 6px; font-weight: bold; border-radius: 14px; cursor: pointer; flex: 1; text-align: center; font-size: 10px; text-transform: uppercase; }
+        .calc-type-btn.active-type { background: #e74c3c; color: #fff; border-color: #ff4d4d; }
+        
+        .meta-info-row { display: flex; justify-content: space-between; background: #1a1a1f; padding: 10px 15px; border-radius: 12px; margin-bottom: 18px; border: 1px solid #25252b; font-size: 12px; }
+        .meta-info-row span b { color: #ff4d4d; }
+        .calc-result-box { background: #08080a; border: 2px dashed #444; padding: 18px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 16px; margin-bottom: 18px; color: #fff; }
+        #bag-calc-result { color: #ff4d4d; font-size: 36px; font-family: monospace; display: block; margin-top: 6px; }
+        .calc-clear-btn { width: 100%; background: #4a5568; color: white; border: none; padding: 14px; font-size: 13px; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; }
+
+        /* АДМІНКА ТА PIN */
+        .admin-meta-box { background: #121214; padding: 18px; border-radius: 18px; border: 1px solid #222228; margin-bottom: 25px; }
+        
+        .meta-btn-group { display: flex; gap: 12px; margin-top: 8px; }
+        .btn-save-meta { flex: 1; background: #2c3e50; border: none; padding: 14px; color: #fff; font-weight: bold; border-radius: 30px; text-transform: uppercase; font-size: 11px; cursor: pointer; }
+        .btn-new-rev { flex: 1; background: #c0392b; border: none; padding: 14px; color: #fff; font-weight: bold; border-radius: 30px; text-transform: uppercase; font-size: 11px; cursor: pointer; }
+        
+        .adm-zone-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 6px; border-bottom: 1px solid #1a1a1f; }
+        .adm-zone-name { font-size: 15px; color: #fff; font-weight: 600; max-width: 55%; word-break: break-word; }
+        .adm-select { background: #1a1a1f; color: #ff4d4d; padding: 10px; border: 1px solid #2d2d35; border-radius: 12px; font-size: 13px; width: 145px; font-weight: bold; }
+        
+        .adm-btn { display: block; width: 100%; border: none; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 35px; margin-top: 15px; text-transform: uppercase; color: #fff; cursor: pointer; }
+        .btn-start { background: #27ae60; }
+        .btn-reset-zones { background: #4f5d73; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        
+        .pin-container { max-width: 300px; margin: 60px auto; text-align: center; padding: 25px; background: #121214; border-radius: 20px; border: 1px solid #222228; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
+        .pin-input { width: 100%; padding: 15px; background: #08080a; border: 1px solid #2d2d35; color: #fff; text-align: center; font-size: 24px; letter-spacing: 10px; border-radius: 14px; margin-bottom: 20px; box-sizing: border-box; }
+
+        .refresh-btn { position: fixed; bottom: 25px; right: 25px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 55px; height: 55px; font-size: 22px; z-index: 1001; box-shadow: 0 6px 20px rgba(0,0,0,0.6); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<div id="top-bar-panel" class="shop-bar">
+    <div class="main-title-text">📋 РЕВІЗІЯ <span id="display-shop">№—</span></div>
+    <span class="head-name" id="display-head"></span>
+</div>
+
+<div class="header-tabs">
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('tasks-screen', this)">📋 Задачі</button>
+        <button class="tab-btn" onclick="switchTab('codes-screen', this)">📚 Шпаргалка</button>
+        <button class="tab-btn" onclick="switchTab('calc-screen-tab', this)">🧮 Кальк пакетів</button>
+        <button class="tab-btn" onclick="switchTab('admin-screen', this)">⚙️ Голова РК</button>
+    </div>
+</div>
+
+<div id="alert" onclick="this.style.display='none'">🔔 ОНОВЛЕНО СПИСОК. ОЗНАЙОМИТИСЬ</div>
+
+<div id="tasks-screen" class="tab-content active">
+    <div class="stats-bar">
+        <div class="stat-item">⏳ В роботі <span class="stat-val active-val" id="count-active">0</span></div>
+        <div class="stat-item">✅ Виконано <span class="stat-val done-val" id="count-done">0/0</span></div>
+    </div>
+
+    <div class="block">
+        <div class="main-title">📦 СКЛАД</div>
+        <div id="sklad-list"></div>
+    </div>
+    <div class="block">
+        <div class="main-title">🏪 ТОРГОВИЙ ЗАЛ</div>
+        <div id="zal-list"></div>
+    </div>
+</div>
+
+<div id="codes-screen" class="tab-content">
+    <input type="text" id="search-bar" class="search-input" placeholder="Пошук коду або назви..." oninput="filterCodes()">
+    <div id="codes-container"></div>
+</div>
+
+<div id="calc-screen-tab" class="tab-content">
+    <div class="calc-box">
+        <label class="calc-label">Тип пакета (Розпорядження):</label>
+        <div class="type-selector">
+            <button id="btn-type-no" class="calc-type-btn active-type" onclick="setBagType('no-handles')">Без ручок<br><b>Код 10837</b></button>
+            <button id="btn-type-with" class="calc-type-btn" onclick="setBagType('handles')">З ручками<br><b>Код 10947</b></button>
+        </div>
+
+        <div class="meta-info-row">
+            <span>Втулка: <b id="lbl-vtl">42 г</b></span>
+            <span>Вага 1 шт: <b id="lbl-pkt">2.2 г</b></span>
+        </div>
+
+        <label class="calc-label">Загальна вага на вагах (грам):</label>
+        <input type="number" id="bag-total-weight" class="calc-input" placeholder="0" oninput="calcBagsTotal()">
+        
+        <label class="calc-label">Кількість втулок (шт):</label>
+        <input type="number" id="bag-vtl-qty" class="calc-input" value="1" oninput="calcBagsTotal()">
+
+        <div class="calc-result-box">
+            КІЛЬКІСТЬ ПАКЕТІВ:
+            <span id="bag-calc-result">0</span>
+        </div>
+        
+        <button class="calc-clear-btn" onclick="clearBagsCalc()">ОЧИСТИТИ</button>
+    </div>
+</div>
+
+<div id="admin-screen" class="tab-content">
+    <div id="admin-auth-container" class="pin-container">
+        <h3 style="margin-top:0; font-size:14px; text-transform:uppercase; letter-spacing:1px; color:#888;">Адмін-панель</h3>
+        <input type="password" id="admin-pin-input" class="pin-input" maxlength="4" inputmode="numeric" placeholder="••••">
+        <button class="action-btn btn-done" style="width:100%;" onclick="verifyAdminPIN()">Увійти</button>
+    </div>
+
+    <div id="admin-actual-content" style="display: none;">
+        <div class="admin-meta-box">
+            <label class="calc-label">Об'єкт та Голова комісії:</label>
+            <input type="text" id="inp-shop" class="search-input" style="margin-bottom:12px;" placeholder="№ магазину">
+            <select id="inp-head" class="search-input" style="margin-bottom:12px;">
+                <option value="">Виберіть Голову комісії...</option>
+            </select>
+            <div class="meta-btn-group">
+                <button class="btn-save-meta" onclick="saveMeta()">💾 Зберегти</button>
+                <button class="btn-new-rev" onclick="startNewRevision()">✨ Нова ревізія</button>
+            </div>
+        </div>
+        
+        <div class="block" style="padding: 10px;">
+            <div class="main-title">📦 ПРИЗНАЧЕННЯ: СКЛАД</div>
+            <div id="admin-sklad-list"></div>
+        </div>
+
+        <div class="block" style="padding: 10px;">
+            <div class="main-title">🏪 ПРИЗНАЧЕННЯ: ТОРГОВИЙ ЗАЛ</div>
+            <div id="admin-zal-list"></div>
+        </div>
+
+        <button class="adm-btn btn-start" onclick="adminAction('activateAll', 'Назначити всі зони з людьми в статус ВИКОНУЄТЬСЯ?')">
+            🚀 НАЗНАЧИТИ ВСІ ЗОНИ
+        </button>
+
+        <button class="adm-btn btn-reset-zones" onclick="adminAction('resetAll', '🚨 УВАГА! Ви дійсно хочете скинути тільки прогрес виконання?\n\n(Призначені ревізори у Вкладці 4 ЗАЛИШАТЬСЯ, але перша вкладка повністю очиститься)')">
+            🧹 СКИHУТИ ПРОГРЕС ЗОН (ОЧИСТИТИ ВКЛАДКУ 1)
+        </button>
+    </div>
+</div>
+
+<button class="refresh-btn" onclick="forceUpdate()">🔄</button>
+
+<script>
+    // 🔗 СЮДИ ВСТАВ СВОЄ ПОСИЛАННЯ ВЕБ-ДОДАТКА З GOOGLE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp6F3MsXzjiTEA3nXlWSDzFf2pFuSv5HR9-ftX9SduhlVzBw0GBfVzvbuvhxixeZBg/exec";
+
+    let isAdminAuthenticated = false;
+    let localDB = {
+        shop: "105", headOfCommission: "",
+        revisors: [
+            "Бастріков М.М.", "Бочковська Л.Р.", "Колбасенко О.В.", "Красилович Ю.І.", 
+            "Кузьменко О.С.", "Мариняк-Бабій С.І.", "Марциновський М.Л.", "Ніколаєнко Т.С.", 
+            "Пастернак О.М.", "Саврук О.С.", "Санжак Х.Ю.", "Старнов В.О."
+        ],
+        tasks: [
+            {zone: "Котячка", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Бакалія", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Сухофрукти", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Кава і чай", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Дитячка", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Кондитер (ваг)", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Кондитер", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Снеки", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Вода, соки, пиво", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Алкоголь", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Хліб", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Овочі і соління + кульки", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Випічка", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Кавомашина", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Прикаса", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Сигарети", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Ригали і банети", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Ригали і банети (ваг)", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Хімія", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "7 днів", person: "Не призначено", status: "", type: "ЗАЛ"},
+            {zone: "Холодильник", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Хімія склад", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "7 днів склад", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Елітка", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Бакалія склад", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Напої", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Овочі, рампа", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Кондитер склад", person: "Не призначено", status: "", type: "СКЛАД"},
+            {zone: "Кабінет, коридор", person: "Не призначено", status: "", type: "СКЛАД"}
+        ]
+    };
+
+    const cheatCodes = [
+        {code: "41025", name: "Яйце поштучно"}, {code: "41334", name: "Мило"},
+        {code: "10754", name: "Маска поштучно"}, {code: "10762", name: "Маленький (пакет)"},
+        {code: "10763", name: "Великий (пакет)"}, {code: "10837", name: "Без ручок (втулка 42г / шт 2.2г)"},
+        {code: "10947", name: "З ручками (втулка 36г / шт 3.2г)"}, {code: "11108", name: "Зелений (пакет)"},
+        {code: "11028", name: "Сертифікат 10"}, {code: "11029", name: "Сертифікат 15"},
+        {code: "11030", name: "Сертифікат 20"}, {code: "11031", name: "Сертифікат 30"},
+        {code: "11032", name: "Сертифікат 40"}, {code: "11033", name: "Сертифікат 50"},
+        {code: "11034", name: "Сертифікат 60"}, {code: "11035", name: "Сертифікат 80"},
+        {code: "11036", name: "Сертифікат 100"}, {code: "11037", name: "Сертифікат 200"},
+        {code: "11016", name: "Сертифікат 300"}, {code: "11015", name: "Сертифікат 500"},
+        {code: "11014", name: "Сертифікат 1000"}
+    ];
+
+    let lastActiveCount = 0;
+    let isFirstLoad = true;
+    let selectedBagType = 'no-handles';
+
+    function switchTab(screenId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        btn.classList.add('active');
+        if (screenId === 'admin-screen') {
+            if (isAdminAuthenticated) {
+                document.getElementById('admin-auth-container').style.display = 'none';
+                document.getElementById('admin-actual-content').style.display = 'block';
+            } else {
+                document.getElementById('admin-auth-container').style.display = 'block';
+                document.getElementById('admin-actual-content').style.display = 'none';
+            }
+        }
+        forceUpdate();
+    }
+
+    function verifyAdminPIN() {
+        if (document.getElementById('admin-pin-input').value === "1234") {
+            isAdminAuthenticated = true;
+            document.getElementById('admin-auth-container').style.display = 'none';
+            document.getElementById('admin-actual-content').style.display = 'block';
+            forceUpdate();
+        } else {
+            alert("❌ Невірний PIN-код!");
+            document.getElementById('admin-pin-input').value = '';
+        }
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+
+    function playLoudNotification() {
+        try {
+            let now = audioCtx.currentTime;
+            function chime(freq, startTime, duration) {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, startTime);
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.25, startTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+                osc.start(startTime); osc.stop(startTime + duration);
+            }
+            chime(523.25, now, 0.4);
+            chime(659.25, now + 0.15, 0.5);
+        } catch(e) {}
+    }
+
+    function saveDataToServer() {
+        if (!SCRIPT_URL || SCRIPT_URL.includes("УСТАНОВІТЬ_СЮДИ")) return;
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(localDB)
+        }).catch(e => console.log("Помилка відправки:", e));
+    }
+
+    function loadDataFromServer() {
+        if (!SCRIPT_URL || SCRIPT_URL.includes("УСТАНОВІТЬ_СЮДИ")) return;
+        fetch(SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.tasks && data.tasks.length > 0) {
+                    let activeBefore = localDB.tasks.filter(t => t.status === "виконується").length;
+                    localDB = data;
+                    let activeAfter = localDB.tasks.filter(t => t.status === "виконується").length;
+                    if (!isFirstLoad && activeAfter > activeBefore) { showNotify(); }
+                    isFirstLoad = false;
+                    forceUpdate();
+                }
+            })
+            .catch(e => console.log("Помилка синхронізації:", e));
+    }
+
+    function executeAction(p) {
+        if (p.action === "updateMeta") {
+            localDB.shop = p.shop; localDB.headOfCommission = p.head;
+        } else if (p.action === "assignZone") {
+            let t = localDB.tasks.find(x => x.zone === p.zone);
+            if(t) t.person = p.person || "Не призначено";
+        } else if (p.action === "activateAll") {
+            localDB.tasks.forEach(x => { if(x.person !== "Не призначено" && x.status !== "виконано") x.status = "виконується"; });
+        } else if (p.action === "resetAll") {
+            localDB.tasks.forEach(t => { t.status = ""; });
+        } else if (p.action === "markDone") {
+            let t = localDB.tasks.find(x => x.zone === p.zone); if(t) t.status = "виконано";
+        } else if (p.action === "undoDone") {
+            let t = localDB.tasks.find(x => x.zone === p.zone); if(t) t.status = "виконується";
+        }
+        forceUpdate();
+        saveDataToServer();
+    }
+
+    function forceUpdate() {
+        document.getElementById('display-shop').innerText = '№' + localDB.shop;
+        document.getElementById('display-head').innerText = localDB.headOfCommission ? '👤 Голова РК: ' + localDB.headOfCommission : '';
+
+        // 🛠 СИНХРОНІЗАЦІЯ ІНПУТІВ В АДМІНЦІ
+        if (document.getElementById('inp-shop') && document.activeElement !== document.getElementById('inp-shop')) {
+            document.getElementById('inp-shop').value = localDB.shop === "—" ? "" : localDB.shop;
+        }
+        if (document.getElementById('inp-head') && document.activeElement !== document.getElementById('inp-head')) {
+            document.getElementById('inp-head').value = localDB.headOfCommission || '';
+        }
+
+        let activeCount = localDB.tasks.filter(t => t.status === "виконується").length;
+        let doneCount = localDB.tasks.filter(t => t.status === "виконано").length;
+        document.getElementById('count-active').innerText = activeCount;
+        document.getElementById('count-done').innerText = doneCount + '/' + localDB.tasks.length;
+
+        const runningTasks = localDB.tasks.filter(t => t.status === "виконується" || t.status === "виконано");
+        renderRevisorList('sklad-list', runningTasks.filter(t => t.type === "СКЛАД"));
+        renderZalList('zal-list', runningTasks.filter(t => t.type === "ЗАЛ"));
+        renderAdminList(localDB.tasks);
+    }
+
+    function showNotify() {
+        document.getElementById('alert').style.display = 'block';
+        if (audioCtx.state === 'suspended') { audioCtx.resume().then(() => { playLoudNotification(); }); } 
+        else { playLoudNotification(); }
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        setTimeout(() => { document.getElementById('alert').style.display = 'none'; }, 15000);
+    }
+
+    function renderRevisorList(id, list) {
+        const container = document.getElementById(id);
+        if (list.length === 0) { container.innerHTML = '<div style="padding:25px;color:#555;text-align:center;font-size:12px;font-weight:bold;">ЗАДАЧІ ВІДСУТНІ</div>'; return; }
+        const grouped = list.reduce((acc, t) => { if (!acc[t.person]) acc[t.person] = []; acc[t.person].push(t); return acc; }, {});
+        let html = '';
+        for (const person in grouped) {
+            html += `<div class="person-group">👤 ${person}</div>`;
+            html += grouped[person].map(t => `
+                <div class="card">
+                    <div class="z-name">${t.zone}</div>
+                    <div>
+                        ${t.status === 'виконується' ? 
+                            `<button class="action-btn btn-done" onclick="taskAction('markDone', '${t.zone}', 'Завершити зону?')">Завершити</button>` : 
+                            `<div style="display:flex;align-items:center;"><span class="status-done-text">✓</span><button class="action-btn btn-undo" onclick="taskAction('undoDone', '${t.zone}', 'Повернути в роботу?')">↩</button></div>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+        container.innerHTML = html;
+    }
+
+    function renderZalList(id, list) { renderRevisorList(id, list); }
+
+    function renderAdminList(tasks) {
+        const genRows = (filtered) => filtered.map(t => {
+            let options = `<option value="">Не призначено</option>` + localDB.revisors.map(r => `<option value="${r}" ${t.person === r ? 'selected' : ''}>${r}</option>`).join('');
+            let badge = t.status === 'виконується' ? ' ⏳' : (t.status === 'виконано' ? ' ✅' : '');
+            return `<div class="adm-zone-row"><div class="adm-zone-name">${t.zone}${badge}</div><select class="adm-select" onchange="changeZoneAssign('${t.zone}', this.value)">${options}</select></div>`;
+        }).join('');
+        document.getElementById('admin-sklad-list').innerHTML = genRows(tasks.filter(t => t.type === "СКЛАД"));
+        document.getElementById('admin-zal-list').innerHTML = genRows(tasks.filter(t => t.type === "ЗАЛ"));
+    }
+
+    function changeZoneAssign(z, personName) { executeAction({action: 'assignZone', zone: z, person: personName}); }
+    
+    const headSelect = document.getElementById('inp-head');
+    localDB.revisors.forEach(r => { let opt = new Option(r, r); headSelect.add(opt); });
+
+    function saveMeta() {
+        executeAction({action: 'updateMeta', shop: document.getElementById('inp-shop').value, head: document.getElementById('inp-head').value});
+        alert("✅ Дані збережено!");
+    }
+
+    function startNewRevision() {
+        if (confirm("🚨 Розпочати нову ревізію? Всі дані будуть видалені!")) {
+            localDB.shop = "—"; localDB.headOfCommission = "";
+            document.getElementById('inp-shop').value = ''; document.getElementById('inp-head').value = '';
+            localDB.tasks.forEach(t => { t.person = "Не призначено"; t.status = ""; });
+            isAdminAuthenticated = false;
+            document.getElementById('admin-auth-container').style.display = 'block';
+            document.getElementById('admin-actual-content').style.display = 'none';
+            executeAction({action: 'none'});
+        }
+    }
+
+    function taskAction(actionName, zoneName, msg) { if(confirm(msg)) { executeAction({action: actionName, zone: zoneName}); } }
+    function adminAction(actionName, confirmMsg) { if (confirm(confirmMsg)) { executeAction({action: actionName}); } }
+
+    function renderCodes(list) { document.getElementById('codes-container').innerHTML = list.map(item => `<div class="code-row"><span class="code-desc"><b>${item.name}</b></span><span class="code-num">${item.code}</span></div>`).join(''); }
+    function filterCodes() { let q = document.getElementById('search-bar').value.toLowerCase(); renderCodes(cheatCodes.filter(i => i.code.includes(q) || i.name.toLowerCase().includes(q))); }
+
+    function setBagType(type) {
+        selectedBagType = type;
+        document.getElementById('btn-type-no').classList.toggle('active-type', type === 'no-handles');
+        document.getElementById('btn-type-with').classList.toggle('active-type', type === 'handles');
+        document.getElementById('lbl-vtl').innerText = type === 'no-handles' ? '42 г' : '36 г';
+        document.getElementById('lbl-pkt').innerText = type === 'no-handles' ? '2.2 г' : '3.2 г';
+        calcBagsTotal();
+    }
+    function calcBagsTotal() {
+        let w = parseFloat(document.getElementById('bag-total-weight').value) || 0;
+        let v = parseInt(document.getElementById('bag-vtl-qty').value) || 0;
+        let vtl = selectedBagType === 'no-handles' ? 42 : 36;
+        let pkt = selectedBagType === 'no-handles' ? 2.2 : 3.2;
+        let res = Math.floor((w - (v * vtl)) / pkt);
+        document.getElementById('bag-calc-result').innerText = res > 0 ? res : 0;
+    }
+    function clearBagsCalc() { document.getElementById('bag-total-weight').value = ''; document.getElementById('bag-vtl-qty').value = '1'; document.getElementById('bag-calc-result').innerText = '0'; }
+
+    renderCodes(cheatCodes);
+    forceUpdate();
+    loadDataFromServer();
+    setInterval(loadDataFromServer, 5000); 
+</script>
+</body>
+</html>
