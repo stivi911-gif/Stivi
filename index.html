@@ -328,7 +328,10 @@
             .then(data => {
                 if (data && data.tasks && data.tasks.length > 0) {
                     let activeBefore = localDB.tasks.filter(t => t.status === "виконується").length;
+                    // Зберігаємо зони з сервера, але список хлопців беремо наш локальний
+                    let currentRevisors = localDB.revisors;
                     localDB = data;
+                    localDB.revisors = currentRevisors;
                     let activeAfter = localDB.tasks.filter(t => t.status === "виконується").length;
                     if (!isFirstLoad && activeAfter > activeBefore) { showNotify(); }
                     isFirstLoad = false;
