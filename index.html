@@ -7,18 +7,18 @@
     <style>
         /* БАЗОВІ НАЛАШТУВАННЯ ТА РОЗШИРЕНА ШАПКА */
         body { background: #08080a; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; padding-top: 175px; height: calc(100vh - 175px); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        
+
         /* ОНОВЛЕНА ВЕРТИКАЛЬНА ПАНЕЛЬ ІНФОРМАЦІЇ */
         .shop-bar { position: fixed; top: 0; left: 0; width: 100%; background: #121214; color: #ffffff; text-align: center; padding: 12px 0; z-index: 1003; border-bottom: 2px solid #e74c3c; box-shadow: 0 2px 15px rgba(0,0,0,0.9); }
         .shop-bar .main-title-text { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .shop-bar .head-name { font-size: 11px; color: #ff4d4d; font-weight: bold; margin-top: 4px; display: block; }
-        
+
         /* НАВІГАЦІЯ */
         .header-tabs { position: fixed; top: 72px; left: 0; width: 100%; background: #0a0a0c; z-index: 1002; border-bottom: 1px solid #222228; }
         .tabs-container { display: table; width: 100%; table-layout: fixed; }
         .tab-btn { display: table-cell; text-align: center; padding: 16px 0; font-weight: bold; font-size: 10px; text-transform: uppercase; color: #9a9aa5; background: #0a0a0c; border: none; cursor: pointer; transition: 0.2s; }
         .tab-btn.active { color: #ffffff; background: #121214; border-bottom: 3px solid #e74c3c; font-size: 11px; }
-        
+
         /* ЛІЧИЛЬНИКИ ПРОГРЕСУ */
         .stats-bar { display: flex; justify-content: space-around; background: #1a1a1f; padding: 10px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #25252b; }
         .stat-item { text-align: center; font-size: 11px; text-transform: uppercase; color: #888; font-weight: bold; }
@@ -28,26 +28,26 @@
 
         /* СПОВІЩЕННЯ */
         #alert { background: #c0392b; color: white; padding: 15px; position: fixed; top: 125px; left: 0; width: 100%; display: none; z-index: 1001; text-align: center; font-weight: bold; font-size: 14px; border-bottom: 2px solid #fff; box-shadow: 0 5px 25px rgba(192, 41, 43, 0.8); box-sizing: border-box; }
-        
+
         .tab-content { display: none; padding: 12px; box-sizing: border-box; }
         .tab-content.active { display: block; }
-        
+
         /* БЛОКИ ТА КАРТКИ */
         .block { border: 1px solid #222228; margin-bottom: 20px; border-radius: 16px; background: #121214; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .main-title { background: #1a1a1f; color: #ffffff; padding: 14px; font-weight: 800; text-align: center; text-transform: uppercase; font-size: 12px; letter-spacing: 1.5px; border-bottom: 1px solid #222228; }
         .person-group { background: #16161a; padding: 10px 16px; font-size: 13px; color: #ff4d4d; font-weight: bold; border-bottom: 1px solid #222228; }
-        
+
         .card { padding: 16px; border-bottom: 1px solid #1a1a1f; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; background: #121214; }
         .z-name { font-size: 16px; font-weight: 700; color: #ffffff; max-width: 50%; word-break: break-all; line-height: 1.2; }
-        
+
         .action-btn { border: none; padding: 11px 18px; font-size: 11px; font-weight: 800; border-radius: 24px; text-transform: uppercase; cursor: pointer; color: #fff; }
         .btn-done { background: #27ae60; box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3); }
         .btn-undo { background: #3e4a59; font-size: 9px; padding: 8px 14px; border-radius: 18px; color: #d1d1d1; }
         .status-done-text { color: #27ae60; font-weight: bold; font-size: 12px; text-transform: uppercase; margin-right: 5px; }
-        
+
         .search-input { width: 100%; padding: 14px 18px; border: 1px solid #2d2d35; background: #1a1a1f; color: #fff; border-radius: 14px; box-sizing: border-box; margin-bottom: 15px; font-size: 16px; font-weight: 500; }
         .search-input:focus { border-color: #ff4d4d; outline: none; background: #202025; }
-        
+
         .code-row { display: flex; justify-content: space-between; padding: 14px 16px; margin-bottom: 8px; border-radius: 12px; background: #16161a; border: 1px solid #222228; align-items: center; }
         .code-num { color: #ff4d4d; font-weight: 800; font-size: 18px; min-width: 80px; text-align: right; font-family: monospace; }
         .code-desc { color: #ffffff; font-size: 16px; font-weight: 500; word-break: break-word; max-width: 70%; }
@@ -57,11 +57,11 @@
         .calc-label { display: block; font-size: 11px; color: #8a8a95; margin-bottom: 7px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
         .calc-input { width: 100%; padding: 14px; background: #08080a; border: 1px solid #2d2d35; color: #fff; border-radius: 14px; font-size: 20px; box-sizing: border-box; margin-bottom: 16px; text-align: center; font-weight: bold; }
         .calc-input:focus { border-color: #ff4d4d; outline: none; }
-        
+
         .type-selector { display: flex; gap: 10px; margin-bottom: 18px; }
         .calc-type-btn { background: #1a1a1f; border: 1px solid #2d2d35; color: #9a9aa5; padding: 12px 6px; font-weight: bold; border-radius: 14px; cursor: pointer; flex: 1; text-align: center; font-size: 10px; text-transform: uppercase; }
         .calc-type-btn.active-type { background: #e74c3c; color: #fff; border-color: #ff4d4d; }
-        
+
         .meta-info-row { display: flex; justify-content: space-between; background: #1a1a1f; padding: 10px 15px; border-radius: 12px; margin-bottom: 18px; border: 1px solid #25252b; font-size: 12px; }
         .meta-info-row span b { color: #ff4d4d; }
         .calc-result-box { background: #08080a; border: 2px dashed #444; padding: 18px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 16px; margin-bottom: 18px; color: #fff; }
@@ -70,26 +70,68 @@
 
         /* АДМІНКА ТА PIN */
         .admin-meta-box { background: #121214; padding: 18px; border-radius: 18px; border: 1px solid #222228; margin-bottom: 25px; }
-        
+
         .meta-btn-group { display: flex; gap: 12px; margin-top: 8px; }
         .btn-save-meta { flex: 1; background: #2c3e50; border: none; padding: 14px; color: #fff; font-weight: bold; border-radius: 30px; text-transform: uppercase; font-size: 11px; cursor: pointer; }
         .btn-new-rev { flex: 1; background: #c0392b; border: none; padding: 14px; color: #fff; font-weight: bold; border-radius: 30px; text-transform: uppercase; font-size: 11px; cursor: pointer; }
-        
+
         .adm-zone-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 6px; border-bottom: 1px solid #1a1a1f; }
         .adm-zone-name { font-size: 15px; color: #fff; font-weight: 600; max-width: 55%; word-break: break-word; }
         .adm-select { background: #1a1a1f; color: #ff4d4d; padding: 10px; border: 1px solid #2d2d35; border-radius: 12px; font-size: 13px; width: 145px; font-weight: bold; }
-        
+
         .adm-btn { display: block; width: 100%; border: none; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 35px; margin-top: 15px; text-transform: uppercase; color: #fff; cursor: pointer; }
         .btn-start { background: #27ae60; }
         .btn-reset-zones { background: #4f5d73; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        
+
         .pin-container { max-width: 300px; margin: 60px auto; text-align: center; padding: 25px; background: #121214; border-radius: 20px; border: 1px solid #222228; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
         .pin-input { width: 100%; padding: 15px; background: #08080a; border: 1px solid #2d2d35; color: #fff; text-align: center; font-size: 24px; letter-spacing: 10px; border-radius: 14px; margin-bottom: 20px; box-sizing: border-box; }
 
         .refresh-btn { position: fixed; bottom: 25px; right: 25px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 55px; height: 55px; font-size: 22px; z-index: 1001; box-shadow: 0 6px 20px rgba(0,0,0,0.6); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* АНІМАЦІЯ ФІРМОВОГО ЛОГОТИПУ ABB ТА ДЕВІЗУ */
+        .logo-wrapper { text-align: center; animation: logoScale 2s infinite ease-in-out; }
+        .shield-icon { animation: shieldNeon 2s infinite ease-in-out; }
+        .check-icon { stroke-dasharray: 50; stroke-dashoffset: 50; animation: drawCheckMark 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes drawCheckMark { to { stroke-dashoffset: 0; } }
+        @keyframes logoScale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+        @keyframes shieldNeon {
+            0%, 100% { stroke: #e74c3c; filter: drop-shadow(0 0 4px rgba(231, 76, 60, 0.5)); }
+            50% { stroke: #ff4d4d; filter: drop-shadow(0 0 16px rgba(231, 76, 60, 0.9)); }
+        }   
     </style>
 </head>
 <body>
+
+<div id="group-select-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #08080a; z-index: 9998; display: none; flex-direction: column; align-items: center; justify-content: center; font-family: -apple-system, sans-serif; padding: 20px; box-sizing: border-box; transition: opacity 0.4s ease;">
+    <h2 style="color: #ffffff; text-transform: uppercase; letter-spacing: 2px; font-size: 20px; margin-bottom: 30px; text-align: center;">
+        Виберіть робочу групу:
+    </h2>
+    
+    <div style="display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 350px;">
+        <button onclick="selectWorkGroup('Kolbasenko')" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: #ffffff; border: none; padding: 20px; font-size: 18px; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); transition: transform 0.2s;">
+            Група Колбасенко
+        </button>
+        
+        <button onclick="selectWorkGroup('Krasylovych')" style="background: linear-gradient(135deg, #2c3e50, #34495e); color: #ffffff; border: none; padding: 20px; font-size: 18px; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4); transition: transform 0.2s;">
+            Група Красилович
+        </button>
+    </div>
+</div>
+
+<div id="splash-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #08080a; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease;">
+    <div class="logo-wrapper">
+        <svg width="130" height="130" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 7L82 22V50C82 70 50 91 50 91C50 91 18 70 18 50V22L50 7Z" stroke="#e74c3c" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="shield-icon"/>
+            <path d="M36 51L46 61L64 37" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" class="check-icon"/>
+        </svg>
+        <h1 style="color: #ffffff; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 4px; margin: 18px 0 0 0; font-family: -apple-system, sans-serif; text-align: center;">
+            ABB <span style="color: #e74c3c;">Revision</span>
+            <span style="display: block; color: #666670; font-size: 15px; font-weight: 500; text-transform: none; letter-spacing: 0.5px; margin-top: 10px; font-style: italic; font-family: sans-serif;">
+                "Рахуємо мільйони, отримуємо досвід."
+            </span>
+        </h1>
+    </div>
+</div>
 
 <div id="top-bar-panel" class="shop-bar">
     <div class="main-title-text">📋 Магазин <span id="display-shop">№—</span></div>
@@ -143,7 +185,7 @@
 
         <label class="calc-label">Загальна вага на вагах (грам):</label>
         <input type="number" id="bag-total-weight" class="calc-input" placeholder="0" oninput="calcBagsTotal()">
-        
+
         <label class="calc-label">Кількість втулок (шт):</label>
         <input type="number" id="bag-vtl-qty" class="calc-input" value="1" oninput="calcBagsTotal()">
 
@@ -151,7 +193,7 @@
             КІЛЬКІСТЬ ПАКЕТІВ:
             <span id="bag-calc-result">0</span>
         </div>
-        
+
         <button class="calc-clear-btn" onclick="clearBagsCalc()">ОЧИСТИТИ</button>
     </div>
 </div>
@@ -175,7 +217,7 @@
                 <button class="btn-new-rev" onclick="startNewRevision()">✨ Нова ревізія</button>
             </div>
         </div>
-        
+
         <div class="block" style="padding: 10px;">
             <div class="main-title">📦 ПРИЗНАЧЕННЯ: СКЛАД</div>
             <div id="admin-sklad-list"></div>
@@ -203,6 +245,8 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp6F3MsXzjiTEA3nXlWSDzFf2pFuSv5HR9-ftX9SduhlVzBw0GBfVzvbuvhxixeZBg/exec";
 
     let isAdminAuthenticated = false;
+    let currentGroup = ""; // Активна група (задається ревізором при вході)
+
     let localDB = {
         shop: "--", headOfCommission: "",
         revisors: [
@@ -312,26 +356,37 @@
         } catch(e) {}
     }
 
+    // ВІДПРАВКА ДАНИХ НА СЕРВЕР (POST-запит у конкретну вкладку)
     function saveDataToServer() {
         if (!SCRIPT_URL || SCRIPT_URL.includes("УСТАНОВІТЬ_СЮДИ")) return;
-        fetch(SCRIPT_URL, {
+        if (!currentGroup) return;
+
+        const saveUrl = SCRIPT_URL + "?group=" + currentGroup;
+
+        fetch(saveUrl, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify(localDB)
         }).catch(e => console.log("Помилка відправки:", e));
     }
 
+    // ЗАВАНТАЖЕННЯ ДАНИХ З СЕРВЕРА (GET-запит із конкретної вкладки)
     function loadDataFromServer() {
         if (!SCRIPT_URL || SCRIPT_URL.includes("УСТАНОВІТЬ_СЮДИ")) return;
-        fetch(SCRIPT_URL)
+        if (!currentGroup) return; // Чекаємо вибору групи
+
+        const fetchUrl = SCRIPT_URL + "?group=" + currentGroup;
+
+        fetch(fetchUrl)
             .then(res => res.json())
             .then(data => {
                 if (data && data.tasks && data.tasks.length > 0) {
-                    let activeBefore = localDB.tasks.filter(t => t.status === "виконується").length;
-                    // Зберігаємо зони з сервера, але список хлопців беремо наш локальний
+                    let activeBefore = localDB.tasks ? localDB.tasks.filter(t => t.status === "виконується").length : 0;
+                    
                     let currentRevisors = localDB.revisors;
                     localDB = data;
                     localDB.revisors = currentRevisors;
+                    
                     let activeAfter = localDB.tasks.filter(t => t.status === "виконується").length;
                     if (!isFirstLoad && activeAfter > activeBefore) { showNotify(); }
                     isFirstLoad = false;
@@ -364,7 +419,6 @@
         document.getElementById('display-shop').innerText = '№' + localDB.shop;
         document.getElementById('display-head').innerText = localDB.headOfCommission ? '👤 Голова РК: ' + localDB.headOfCommission : '';
 
-        // 🛠 СИНХРОНІЗАЦІЯ ІНПУТІВ В АДМІНЦІ
         if (document.getElementById('inp-shop') && document.activeElement !== document.getElementById('inp-shop')) {
             document.getElementById('inp-shop').value = localDB.shop === "—" ? "" : localDB.shop;
         }
@@ -372,15 +426,17 @@
             document.getElementById('inp-head').value = localDB.headOfCommission || '';
         }
 
-        let activeCount = localDB.tasks.filter(t => t.status === "виконується").length;
-        let doneCount = localDB.tasks.filter(t => t.status === "виконано").length;
-        document.getElementById('count-active').innerText = activeCount;
-        document.getElementById('count-done').innerText = doneCount + '/' + localDB.tasks.length;
+        let activeCount = localDB.tasks ? localDB.tasks.filter(t => t.status === "виконується").length : 0;
+        let doneCount = localDB.tasks ? localDB.tasks.filter(t => t.status === "виконано").length : 0;
+        let totalCount = localDB.tasks ? localDB.tasks.length : 0;
 
-        const runningTasks = localDB.tasks.filter(t => t.status === "виконується" || t.status === "виконано");
+        document.getElementById('count-active').innerText = activeCount;
+        document.getElementById('count-done').innerText = doneCount + '/' + totalCount;
+
+        const runningTasks = localDB.tasks ? localDB.tasks.filter(t => t.status === "виконується" || t.status === "виконано") : [];
         renderRevisorList('sklad-list', runningTasks.filter(t => t.type === "СКЛАД"));
         renderZalList('zal-list', runningTasks.filter(t => t.type === "ЗАЛ"));
-        renderAdminList(localDB.tasks);
+        renderAdminList(localDB.tasks || []);
     }
 
     function showNotify() {
@@ -426,7 +482,7 @@
     }
 
     function changeZoneAssign(z, personName) { executeAction({action: 'assignZone', zone: z, person: personName}); }
-    
+
     const headSelect = document.getElementById('inp-head');
     localDB.revisors.forEach(r => { let opt = new Option(r, r); headSelect.add(opt); });
 
@@ -453,28 +509,84 @@
     function renderCodes(list) { document.getElementById('codes-container').innerHTML = list.map(item => `<div class="code-row"><span class="code-desc"><b>${item.name}</b></span><span class="code-num">${item.code}</span></div>`).join(''); }
     function filterCodes() { let q = document.getElementById('search-bar').value.toLowerCase(); renderCodes(cheatCodes.filter(i => i.code.includes(q) || i.name.toLowerCase().includes(q))); }
 
+    // ЛОГІКА КАЛЬКУЛЯТОРА ПАКЕТІВ
     function setBagType(type) {
         selectedBagType = type;
         document.getElementById('btn-type-no').classList.toggle('active-type', type === 'no-handles');
         document.getElementById('btn-type-with').classList.toggle('active-type', type === 'handles');
-        document.getElementById('lbl-vtl').innerText = type === 'no-handles' ? '42 г' : '36 г';
-        document.getElementById('lbl-pkt').innerText = type === 'no-handles' ? '2.2 г' : '3.2 г';
+        if (type === 'no-handles') {
+            document.getElementById('lbl-vtl').innerText = '42 г';
+            document.getElementById('lbl-pkt').innerText = '2.2 г';
+        } else {
+            document.getElementById('lbl-vtl').innerText = '36 г';
+            document.getElementById('lbl-pkt').innerText = '3.2 г';
+        }
         calcBagsTotal();
     }
-    function calcBagsTotal() {
-        let w = parseFloat(document.getElementById('bag-total-weight').value) || 0;
-        let v = parseInt(document.getElementById('bag-vtl-qty').value) || 0;
-        let vtl = selectedBagType === 'no-handles' ? 42 : 36;
-        let pkt = selectedBagType === 'no-handles' ? 2.2 : 3.2;
-        let res = Math.floor((w - (v * vtl)) / pkt);
-        document.getElementById('bag-calc-result').innerText = res > 0 ? res : 0;
-    }
-    function clearBagsCalc() { document.getElementById('bag-total-weight').value = ''; document.getElementById('bag-vtl-qty').value = '1'; document.getElementById('bag-calc-result').innerText = '0'; }
 
+    function calcBagsTotal() {
+        let totalW = parseFloat(document.getElementById('bag-total-weight').value) || 0;
+        let vtlQty = parseFloat(document.getElementById('bag-vtl-qty').value) || 0;
+        let vtlWeight = selectedBagType === 'no-handles' ? 42 : 36;
+        let pktWeight = selectedBagType === 'no-handles' ? 2.2 : 3.2;
+        
+        let netWeight = totalW - (vtlQty * vtlWeight);
+        if (netWeight < 0) netWeight = 0;
+        
+        let count = Math.round(netWeight / pktWeight);
+        document.getElementById('bag-calc-result').innerText = count < 0 ? 0 : count;
+    }
+
+    function clearBagsCalc() {
+        document.getElementById('bag-total-weight').value = '';
+        document.getElementById('bag-vtl-qty').value = '1';
+        document.getElementById('bag-calc-result').innerText = '0';
+    }
+
+    // ТАЙМЕР ЗАСТАВКИ ТА ОДНОЧАСНИЙ ВИКЛИК ЕКРАНУ ВИБОРУ ГРУПИ
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.remove();
+                    const groupScreen = document.getElementById('group-select-screen');
+                    if (groupScreen) {
+                        groupScreen.style.display = 'flex';
+                    }
+                }, 500);
+            }
+        }, 2200);
+    });
+
+    // ОБРОБКА КНОПКИ ВИБОРУ ГРУПИ
+    function selectWorkGroup(groupName) {
+        currentGroup = groupName; // запам'ятовуємо вибір (Kolbasenko або Krasylovych)
+        
+        const groupScreen = document.getElementById('group-select-screen');
+        if (groupScreen) {
+            groupScreen.style.opacity = '0';
+            setTimeout(() => groupScreen.remove(), 400);
+        }
+        
+        // Повідомляємо сервер про запуск (якщо потрібно для логів)
+        sendGroupToGoogle(groupName);
+        
+        // МИТТЄВО завантажуємо задачі саме з потрібної вкладки
+        loadDataFromServer();
+    }
+
+    function sendGroupToGoogle(group) {
+        if (!SCRIPT_URL || SCRIPT_URL.includes("УСТАНОВІТЬ_СЮДИ")) return;
+        const url = SCRIPT_URL + "?action=setGroup&group=" + group;
+        fetch(url).catch(err => console.error("Помилка логування групи:", err));
+    }
+
+    // СТАРТОВІ ІНІЦІАЛІЗАЦІЇ
     renderCodes(cheatCodes);
     forceUpdate();
-    loadDataFromServer();
-    setInterval(loadDataFromServer, 5000); 
+    setInterval(loadDataFromServer, 5000); // Автосинхронізація кожні 5 секунд
 </script>
 </body>
 </html>
